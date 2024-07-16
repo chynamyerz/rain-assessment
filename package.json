@@ -2,6 +2,7 @@
   "name": "rain-assessment",
   "private": true,
   "scripts": {
+    "frontend": "cd apps/frontend && npm run dev",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
