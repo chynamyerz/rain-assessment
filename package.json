@@ -3,9 +3,11 @@
   "private": true,
   "scripts": {
     "frontend": "cd apps/frontend && npm run dev",
+    "frontend:test": "cd apps/frontend && npm run test",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "test": "turbo test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
