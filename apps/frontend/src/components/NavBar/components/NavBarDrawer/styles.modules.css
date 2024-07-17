@@ -1,0 +1,23 @@
+.navbar-drawer-icon:hover {
+  color: #0077c8;
+}
+
+.navbar-drawer-items-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 2rem;
+  width: 180px;
+
+  .navbar-drawer-close-icon-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+
+    .navbar-drawer-close-icon:hover {
+      color: #0077c8;
+    }
+  }
+}
