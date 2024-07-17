@@ -1,0 +1,38 @@
+.navbar-item-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #555555;
+
+  .navbar-item-icon {
+    color: #0077c8;
+    font-size: 1.5rem;
+  }
+}
+
+.navbar-item-container:hover {
+  background-color: #0077c8;
+
+  .navbar-item-icon {
+    color: white;
+  }
+
+  .navbar-item-label {
+    color: white;
+  }
+}
+
+.navbar-item-container.active {
+  .navbar-item-label {
+    font-weight: 700;
+  }
+}
+
+.navbar-item-container.extracted {
+  color: #0077c8;
+}
