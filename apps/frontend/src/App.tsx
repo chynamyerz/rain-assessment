@@ -1,12 +1,15 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { NavBar } from './components';
+import { Box, Divider } from '@mui/material';
+
 import { Dashboard, Home, Orders, Payments, Services } from './pages';
-import { Stack } from '@mui/material';
+import { NavBar } from './components';
+import './styles.modules.css';
 
 function App() {
   return (
-    <Stack padding={5} gap={5}>
+    <Box className="app-container">
       <NavBar />
+      <Divider />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -16,7 +19,7 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </Stack>
+    </Box>
   );
 }
 
