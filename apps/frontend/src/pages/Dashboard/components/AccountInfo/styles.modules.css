@@ -1,0 +1,11 @@
+.account-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  flex: 1;
+
+  .account-info-title {
+    color: #0077c8;
+  }
+}

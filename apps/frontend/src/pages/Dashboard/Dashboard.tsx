@@ -1,10 +1,20 @@
 import { FC } from 'react';
-import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
+
+import { AccountInfo, Account } from './components';
+import './styles.modules.css';
 
 export const Dashboard: FC = () => {
   return (
-    <Typography variant="h5" component="h5">
-      Dashboard page
-    </Typography>
+    <Box className="dashboard">
+      <Box className="dashboard-account-container">
+        <Account name="Full name" status="active" />
+      </Box>
+
+      <Box className="dashboard-account-info-container">
+        <AccountInfo title="Balance" subtitle="R120.00" />
+        <AccountInfo title="Due date" subtitle="Monday, December 31, 2024" />
+      </Box>
+    </Box>
   );
 };
