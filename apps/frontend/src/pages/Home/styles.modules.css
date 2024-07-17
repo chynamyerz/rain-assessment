@@ -1,0 +1,36 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  .logo-image {
+    width: 200px;
+    z-index: 1;
+  }
+
+  .auth-container {
+    position: relative;
+    top: -100px;
+
+    .auth-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding-top: 120px;
+    }
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .auth-container {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 661px) {
+  .auth-container {
+    width: 60%;
+  }
+}
