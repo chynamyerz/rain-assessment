@@ -2,10 +2,11 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
 
-import { NavBarDrawer, NavBarItem } from "./components";
+import { useScreenSize } from "@hooks/useScreenSize";
 import { NAVBAR_ITEMS } from "./constants";
 import "./styles.modules.css";
-import { useScreenSize } from "../../hooks/useScreenSize";
+import { NavBarItem } from "./components/NavBarItem/NavBarItem";
+import { NavBarDrawer } from "./components/NavBarDrawer/NavDrawer";
 
 export const NavBar: FC = () => {
   const { isMediumAndAbove } = useScreenSize();

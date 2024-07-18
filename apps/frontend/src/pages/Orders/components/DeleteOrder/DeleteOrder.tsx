@@ -2,21 +2,20 @@ import { FC } from "react";
 import { TextField } from "@mui/material";
 
 import { RModal } from "@components/RModal/RModal";
-import { useEditService } from "./hooks/useEditService";
+import { useDeleteOrders } from "./hooks/useDeleteOrders";
 
-export const EditService: FC = () => {
-  const { open, handleSubmit, handleCancel } = useEditService();
-
+export const DeleteOrder: FC = () => {
+  const { open, handleSubmit, handleCancel } = useDeleteOrders();
   return (
     <RModal
       open={open}
-      title="Update service"
+      title="Delete order"
       primaryAction={handleSubmit}
       primaryActionText="Submit"
       secondaryAction={handleCancel}
       secondaryActionText="Cancel"
     >
-      <TextField placeholder="Service name" />
+      <TextField placeholder="Order name" />
     </RModal>
   );
 };

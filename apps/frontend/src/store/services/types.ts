@@ -1,3 +1,5 @@
+import { ActionType } from "@store/types";
+
 export interface ServicesState {
   services: Service[];
   selectedService: Service | undefined | null;
@@ -10,5 +12,3 @@ export interface Service {
   status: string;
   details: string;
 }
-
-export type ActionType = "add" | "edit" | "delete" | undefined;

@@ -5,7 +5,9 @@ import { Add, ChevronLeft, DeleteForever, Edit } from "@mui/icons-material";
 
 import { Service } from "@store/services/types";
 import { useServices } from "./hooks/useServices";
-import { AddService, DeleteService, EditService } from "./components";
+import { AddService } from "./components/AddService/AddService";
+import { DeleteService } from "./components/DeleteService/DeleteService";
+import { EditService } from "./components/EditService/EditService";
 import "./styles.modules.css";
 
 export const Services: FC = () => {

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { setActiontype } from "@store/services/servicesSlice";
 
-export const useEditServices = () => {
+export const useEditService = () => {
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
 

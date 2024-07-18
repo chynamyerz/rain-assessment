@@ -2,21 +2,21 @@ import { FC } from "react";
 import { TextField } from "@mui/material";
 
 import { RModal } from "@components/RModal/RModal";
-import { useEditService } from "./hooks/useEditService";
+import { useAddOrder } from "./hooks/useAddOrder";
 
-export const EditService: FC = () => {
-  const { open, handleSubmit, handleCancel } = useEditService();
+export const AddOrder: FC = () => {
+  const { open, handleSubmit, handleCancel } = useAddOrder();
 
   return (
     <RModal
       open={open}
-      title="Update service"
+      title="Add order"
       primaryAction={handleSubmit}
       primaryActionText="Submit"
       secondaryAction={handleCancel}
       secondaryActionText="Cancel"
     >
-      <TextField placeholder="Service name" />
+      <TextField placeholder="Oders name" />
     </RModal>
   );
 };
