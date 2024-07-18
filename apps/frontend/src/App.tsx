@@ -1,9 +1,13 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { Box, Divider } from '@mui/material';
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Box, Divider } from "@mui/material";
 
-import { Dashboard, Home, Orders, Payments, Services } from './pages';
-import { NavBar } from './components';
-import './styles.modules.css';
+import { NavBar } from "@components/NavBar/NavBar";
+import { Home } from "@pages/Home/Home";
+import { Dashboard } from "@pages/Dashboard/Dashboard";
+import { Services } from "@pages/Services/Services";
+import { Orders } from "@pages/Orders/Orders";
+import { Payments } from "@pages/Payments/Payments";
+import "./styles.modules.css";
 
 function App() {
   return (

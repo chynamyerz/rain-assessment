@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { setActiontype } from "../../../../../store/services/servicesSlice";
+import { setActiontype } from "@store/services/servicesSlice";
 
 export const useDeleteService = () => {
   const [open, setOpen] = useState(true);

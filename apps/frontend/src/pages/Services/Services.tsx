@@ -3,9 +3,9 @@ import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, ChevronLeft, DeleteForever, Edit } from "@mui/icons-material";
 
+import { Service } from "@store/services/types";
 import { useServices } from "./hooks/useServices";
 import { AddService, DeleteService, EditService } from "./components";
-import { Service } from "../../store/services/types";
 import "./styles.modules.css";
 
 export const Services: FC = () => {

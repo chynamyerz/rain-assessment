@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { GridColDef, GridRowsProp } from "@mui/x-data-grid";
 
-import { RootState } from "../../../store";
-import { ActionType, Service } from "../../../store/services/types";
+import { useScreenSize } from "@hooks/useScreenSize";
 import {
   setActiontype,
   setSelectedService,
-} from "../../../store/services/servicesSlice";
-import { useScreenSize } from "../../../hooks/useScreenSize";
+} from "@store/services/servicesSlice";
+import { RootState } from "@store/index";
+import { ActionType, Service } from "@store/services/types";
 
 export const useServices = () => {
   const { services, selectedService, actionType } = useSelector(
