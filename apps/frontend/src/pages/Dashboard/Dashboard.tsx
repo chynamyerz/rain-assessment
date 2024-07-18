@@ -1,8 +1,9 @@
-import { FC } from 'react';
-import { Box } from '@mui/material';
+import { FC } from "react";
+import { Box } from "@mui/material";
 
-import { AccountInfo, Account } from './components';
-import './styles.modules.css';
+import { Account } from "./components/Account/Account";
+import { AccountInfo } from "./components/AccountInfo/AccountInfo";
+import "./styles.modules.css";
 
 export const Dashboard: FC = () => {
   return (

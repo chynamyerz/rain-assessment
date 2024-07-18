@@ -4,42 +4,39 @@ import { useDispatch, useSelector } from "react-redux";
 import { GridColDef, GridRowsProp } from "@mui/x-data-grid";
 
 import { useScreenSize } from "@hooks/useScreenSize";
-import {
-  setActiontype,
-  setSelectedService,
-} from "@store/services/servicesSlice";
+import { setActiontype, setSelectedOrder } from "@store/orders/ordersSlice";
 import { RootState } from "@store/index";
-import { Service } from "@store/services/types";
+import { Order } from "@store/orders/types";
 import { ActionType } from "@store/types";
 
-export const useServices = () => {
-  const { services, selectedService, actionType } = useSelector(
-    (state: RootState) => state.services
+export const useOrders = () => {
+  const { orders, selectedOrder, actionType } = useSelector(
+    (state: RootState) => state.orders
   );
   const { isMediumAndAbove } = useScreenSize();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const columns: GridColDef<Service>[] = useMemo(() => {
+  const columns: GridColDef<Order>[] = useMemo(() => {
     if (isMediumAndAbove) {
       return [
-        { field: "name", headerName: "Name", flex: 1 },
+        { field: "date", headerName: "Date", flex: 1 },
         { field: "status", headerName: "Status", flex: 1 },
-        { field: "details", headerName: "Details", flex: 1 },
-      ] as GridColDef<Service>[];
+        { field: "item", headerName: "Items", flex: 1 },
+      ] as GridColDef<Order>[];
     }
     return [
       { field: "name", flex: 1 },
       { field: "status", flex: 1 },
-    ] as GridColDef<Service>[];
+    ] as GridColDef<Order>[];
   }, [isMediumAndAbove]);
-  const rowData: GridRowsProp<Service> = services;
+  const rowData: GridRowsProp<Order> = orders;
 
   const handleAction = (actionType: ActionType) => {
     dispatch(setActiontype(actionType));
   };
 
-  const handleSelectedService = (service: Service | undefined | null) => {
-    dispatch(setSelectedService(service));
+  const handleSelectedOrder = (order: Order | undefined | null) => {
+    dispatch(setSelectedOrder(order));
   };
 
   const handleNavigateback = () => {
@@ -50,9 +47,9 @@ export const useServices = () => {
     actionType,
     rowData,
     columns,
-    selectedService,
+    selectedOrder,
     handleAction,
-    handleSelectedService,
+    handleSelectedOrder,
     handleNavigateback,
   };
 };

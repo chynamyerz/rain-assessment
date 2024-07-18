@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ServicesState, Service, ActionType } from "./types";
 import type { PayloadAction } from "@reduxjs/toolkit";
+
+import { ActionType } from "@store/types";
+import { ServicesState, Service } from "./types";
 
 const initialState: ServicesState = {
   services: [
