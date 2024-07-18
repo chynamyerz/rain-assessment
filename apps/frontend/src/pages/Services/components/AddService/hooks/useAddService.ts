@@ -1,18 +1,20 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
-import { useAddServiceParams } from "../types";
+import { setActiontype } from "../../../../../store/services/servicesSlice";
 
-export const useAddService = ({ setAction }: useAddServiceParams) => {
+export const useAddService = () => {
   const [open, setOpen] = useState(true);
+  const dispatch = useDispatch();
 
   const handleSubmit = () => {
     setOpen(false);
-    setAction(undefined);
+    dispatch(setActiontype(undefined));
   };
 
   const handleCancel = () => {
     setOpen(false);
-    setAction(undefined);
+    dispatch(setActiontype(undefined));
   };
 
   return {

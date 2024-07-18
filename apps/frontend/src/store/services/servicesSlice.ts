@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { ServicesState, Service, ActionType } from "./types";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ServicesState, Service } from "./types";
 
 const initialState: ServicesState = {
   services: [
@@ -8,6 +8,8 @@ const initialState: ServicesState = {
     { id: 2, name: "Hello", status: "World", details: "Details" },
     { id: 3, name: "Hello", status: "World", details: "Details" },
   ],
+  selectedService: undefined,
+  actionType: undefined,
 };
 
 export const servicesSlice = createSlice({
@@ -31,9 +33,37 @@ export const servicesSlice = createSlice({
         (service) => service.id != action.payload.id
       );
     },
+    setActiontype: (state, action: PayloadAction<ActionType>) => {
+      switch (action.payload) {
+        case "add":
+          state.actionType = "add";
+          break;
+        case "edit":
+          state.actionType = "edit";
+          break;
+        case "delete":
+          state.actionType = "delete";
+          break;
+        default:
+          state.actionType = undefined;
+          return;
+      }
+    },
+    setSelectedService: (
+      state,
+      action: PayloadAction<Service | undefined | null>
+    ) => {
+      state.selectedService = action.payload;
+    },
   },
 });
 
-export const { addService, editService, deleteService } = servicesSlice.actions;
+export const {
+  addService,
+  editService,
+  deleteService,
+  setActiontype,
+  setSelectedService,
+} = servicesSlice.actions;
 
 export default servicesSlice.reducer;

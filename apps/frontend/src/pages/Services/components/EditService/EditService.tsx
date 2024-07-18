@@ -2,11 +2,11 @@ import { FC } from "react";
 import { TextField } from "@mui/material";
 
 import { RModal } from "../../../../components";
-import { EditServiceProps } from "./types";
 import { useEditServices } from "./hooks/useEditServices";
 
-export const EditService: FC<EditServiceProps> = ({ setAction }) => {
-  const { open, handleSubmit, handleCancel } = useEditServices({ setAction });
+export const EditService: FC = () => {
+  const { open, handleSubmit, handleCancel } = useEditServices();
+
   return (
     <RModal
       open={open}

@@ -2,11 +2,10 @@ import { FC } from "react";
 import { TextField } from "@mui/material";
 
 import { RModal } from "../../../../components";
-import { DeleteServiceProps } from "./types";
 import { useDeleteService } from "./hooks/useDeleteService";
 
-export const DeleteService: FC<DeleteServiceProps> = ({ setAction }) => {
-  const { open, handleSubmit, handleCancel } = useDeleteService({ setAction });
+export const DeleteService: FC = () => {
+  const { open, handleSubmit, handleCancel } = useDeleteService();
   return (
     <RModal
       open={open}

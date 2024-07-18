@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, ChevronLeft, DeleteForever, Edit } from "@mui/icons-material";
@@ -9,9 +9,15 @@ import { Service } from "../../store/services/types";
 import "./styles.modules.css";
 
 export const Services: FC = () => {
-  const [selectedRow, setSelectedRow] = useState<Service | null>();
-  const { action, rowData, columns, handleAction, handleNavigateback } =
-    useServices();
+  const {
+    selectedService,
+    actionType,
+    rowData,
+    columns,
+    handleAction,
+    handleSelectedService,
+    handleNavigateback,
+  } = useServices();
 
   return (
     <Box className="services">
@@ -33,7 +39,7 @@ export const Services: FC = () => {
         >
           Add
         </Button>
-        {selectedRow && (
+        {selectedService && (
           <Button
             variant="outlined"
             color="warning"
@@ -43,7 +49,7 @@ export const Services: FC = () => {
             Edit
           </Button>
         )}
-        {selectedRow && (
+        {selectedService && (
           <Button
             variant="outlined"
             color="error"
@@ -64,14 +70,14 @@ export const Services: FC = () => {
           disableMultipleRowSelection
           onRowSelectionModelChange={(row, details) => {
             const rowData = details.api.getRow<Service>(row[0]);
-            setSelectedRow(rowData);
+            handleSelectedService(rowData);
           }}
         />
       </Box>
 
-      {action === "add" && <AddService setAction={handleAction} />}
-      {action === "edit" && <EditService setAction={handleAction} />}
-      {action === "delete" && <DeleteService setAction={handleAction} />}
+      {actionType === "add" && <AddService />}
+      {actionType === "edit" && <EditService />}
+      {actionType === "delete" && <DeleteService />}
     </Box>
   );
 };

@@ -1,16 +1,23 @@
-import { useMemo, useState } from "react";
-import { ActionType } from "../types";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
-import { Service } from "../../../store/services/types";
+import { useDispatch, useSelector } from "react-redux";
 import { GridColDef, GridRowsProp } from "@mui/x-data-grid";
 import { useMediaQuery, useTheme } from "@mui/material";
 
+import { RootState } from "../../../store";
+import { ActionType, Service } from "../../../store/services/types";
+
+import {
+  setActiontype,
+  setSelectedService,
+} from "../../../store/services/servicesSlice";
+
 export const useServices = () => {
-  const [action, setAction] = useState<ActionType>();
-  const { services } = useSelector((state: RootState) => state.services);
+  const { services, selectedService, actionType } = useSelector(
+    (state: RootState) => state.services
+  );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const theme = useTheme();
   const isMediumAndAbove = useMediaQuery(theme.breakpoints.up("sm"));
   const columns: GridColDef<Service>[] = useMemo(() => {
@@ -29,20 +36,11 @@ export const useServices = () => {
   const rowData: GridRowsProp<Service> = services;
 
   const handleAction = (actionType: ActionType) => {
-    switch (actionType) {
-      case "add":
-        setAction("add");
-        break;
-      case "edit":
-        setAction("edit");
-        break;
-      case "delete":
-        setAction("delete");
-        break;
-      default:
-        setAction(undefined);
-        return;
-    }
+    dispatch(setActiontype(actionType));
+  };
+
+  const handleSelectedService = (service: Service | undefined | null) => {
+    dispatch(setSelectedService(service));
   };
 
   const handleNavigateback = () => {
@@ -50,10 +48,12 @@ export const useServices = () => {
   };
 
   return {
-    action,
+    actionType,
     rowData,
     columns,
+    selectedService,
     handleAction,
+    handleSelectedService,
     handleNavigateback,
   };
 };
