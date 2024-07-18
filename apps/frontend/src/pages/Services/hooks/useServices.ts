@@ -2,24 +2,22 @@ import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { GridColDef, GridRowsProp } from "@mui/x-data-grid";
-import { useMediaQuery, useTheme } from "@mui/material";
 
 import { RootState } from "../../../store";
 import { ActionType, Service } from "../../../store/services/types";
-
 import {
   setActiontype,
   setSelectedService,
 } from "../../../store/services/servicesSlice";
+import { useScreenSize } from "../../../hooks/useScreenSize";
 
 export const useServices = () => {
   const { services, selectedService, actionType } = useSelector(
     (state: RootState) => state.services
   );
+  const { isMediumAndAbove } = useScreenSize();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const theme = useTheme();
-  const isMediumAndAbove = useMediaQuery(theme.breakpoints.up("sm"));
   const columns: GridColDef<Service>[] = useMemo(() => {
     if (isMediumAndAbove) {
       return [
