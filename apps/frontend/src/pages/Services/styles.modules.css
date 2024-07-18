@@ -1,0 +1,19 @@
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .back-button {
+
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  .data-container {
+    height: fit-content;
+  }
+}
