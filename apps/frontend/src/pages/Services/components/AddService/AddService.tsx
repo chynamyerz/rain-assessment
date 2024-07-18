@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { TextField } from "@mui/material";
 
-import { RModal } from "../../../../components";
+import { RModal } from "@components/RModal/RModal";
 import { useAddService } from "./hooks/useAddService";
 
 export const AddService: FC = () => {
