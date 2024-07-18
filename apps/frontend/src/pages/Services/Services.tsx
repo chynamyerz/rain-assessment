@@ -1,43 +1,17 @@
-import { FC, useMemo, useState } from "react";
-import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
-import { DataGrid, type GridColDef, type GridRowsProp } from "@mui/x-data-grid";
+import { FC, useState } from "react";
+import { Box, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { Add, ChevronLeft, DeleteForever, Edit } from "@mui/icons-material";
 
-import "./styles.modules.css";
 import { useServices } from "./hooks/useServices";
 import { AddService, DeleteService, EditService } from "./components";
+import { Service } from "../../store/services/types";
+import "./styles.modules.css";
 
-interface ServicesRowData {
-  id: number;
-  name: string;
-  status: string;
-  details: string;
-}
 export const Services: FC = () => {
-  const [selectedRow, setSelectedRow] = useState<ServicesRowData | null>();
-  const { action, handleAction, handleNavigateback } = useServices();
-  const theme = useTheme();
-  const isMediumAndAbove = useMediaQuery(theme.breakpoints.up("sm"));
-
-  const rows: GridRowsProp<ServicesRowData> = [
-    { id: 1, name: "Hello", status: "World", details: "Details" },
-    { id: 2, name: "Hello", status: "World", details: "Details" },
-    { id: 3, name: "Hello", status: "World", details: "Details" },
-  ];
-
-  const columns: GridColDef<ServicesRowData>[] = useMemo(() => {
-    if (isMediumAndAbove) {
-      return [
-        { field: "name", headerName: "Name", flex: 1 },
-        { field: "status", headerName: "Status", flex: 1 },
-        { field: "details", headerName: "Details", flex: 1 },
-      ] as GridColDef<ServicesRowData>[];
-    }
-    return [
-      { field: "name", flex: 1 },
-      { field: "status", flex: 1 },
-    ];
-  }, [isMediumAndAbove]);
+  const [selectedRow, setSelectedRow] = useState<Service | null>();
+  const { action, rowData, columns, handleAction, handleNavigateback } =
+    useServices();
 
   return (
     <Box className="services">
@@ -82,14 +56,14 @@ export const Services: FC = () => {
       </Box>
       <Box>
         <DataGrid
-          rows={rows}
+          rows={rowData}
           columns={columns}
           autoHeight
           checkboxSelection
           disableRowSelectionOnClick
           disableMultipleRowSelection
           onRowSelectionModelChange={(row, details) => {
-            const rowData = details.api.getRow<ServicesRowData>(row[0]);
+            const rowData = details.api.getRow<Service>(row[0]);
             setSelectedRow(rowData);
           }}
         />
