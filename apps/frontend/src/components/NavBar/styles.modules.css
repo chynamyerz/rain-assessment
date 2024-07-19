@@ -13,6 +13,11 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.5rem;
+  }
+
+  .sign-out {
+    /* padding: 0.1rem; */
+    text-transform: none;
   }
 }

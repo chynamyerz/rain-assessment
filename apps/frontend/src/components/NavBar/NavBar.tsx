@@ -1,15 +1,16 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { Logout } from "@mui/icons-material";
 
-import { useScreenSize } from "@hooks/useScreenSize";
-import { NAVBAR_ITEMS } from "./constants";
-import "./styles.modules.css";
 import { NavBarItem } from "./components/NavBarItem/NavBarItem";
 import { NavBarDrawer } from "./components/NavBarDrawer/NavDrawer";
+import { NavBarProps } from "./types";
+import { useNavBar } from "./hooks/useNavBar";
+import "./styles.modules.css";
 
-export const NavBar: FC = () => {
-  const { isMediumAndAbove } = useScreenSize();
+export const NavBar: FC<NavBarProps> = ({ user }) => {
+  const { isMediumAndAbove, getNavbarItems, handleSignOut } = useNavBar();
 
   return (
     <Box className="navbar-container">
@@ -18,7 +19,7 @@ export const NavBar: FC = () => {
       </Link>
       {isMediumAndAbove ? (
         <Box className="navbar-items-container">
-          {NAVBAR_ITEMS.map((navBarItem) => {
+          {getNavbarItems(user).map((navBarItem) => {
             return (
               <NavBarItem
                 key={navBarItem.title}
@@ -28,6 +29,18 @@ export const NavBar: FC = () => {
               />
             );
           })}
+          {user && (
+            <Button
+              className="sign-out"
+              endIcon={<Logout />}
+              variant="contained"
+              size="small"
+              fullWidth
+              onClick={handleSignOut}
+            >
+              Logout
+            </Button>
+          )}
         </Box>
       ) : (
         <NavBarDrawer />
