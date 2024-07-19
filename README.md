@@ -16,12 +16,7 @@ Inside this monorepo you will find the following packages/apps:
 ### Apps and Packages
 
 - `frontend`: a [React.js](https://react.dev/) app
-- `backend`: another [Express.js](https://expressjs.com/) app server
-- `@rain/ui`: a stub React component library shared by applications
-- `@rain/eslint-config`: `eslint` configurations (includes `eslint-config-prettier`)
-- `@rain/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- `backend`: a [Express.js](https://expressjs.com/) app server
 
 ### Utilities
 
@@ -33,26 +28,36 @@ This monorepo uses the following tools:
 
 ### Run
 
-To run all apps and packages, execute the following command:
+_Make sure to add a `.env` file at the root of the `frontend` folder with the value for `VITE_API_URL`_
+
+_Make sure to add a `.env` file at the root of the `backend` folder with the vale for `JWT_SECRET`_
+
+#### To run all apps, execute the following command:
 
 ```
+git clone https://github.com/chynamyerz/rain-assessment
 cd rain-assessment
+npm i
 npm run dev
 ```
 
-Otherwise, to run as individual execute the following
+#### Otherwise, to run as individual execute the following
 
 - For frontend
 
 ```
+git clone https://github.com/chynamyerz/rain-assessment
 cd rain-assessment
+npm i
 npm run frontend
 ```
 
 - For backend
 
 ```
+git clone https://github.com/chynamyerz/rain-assessment
 cd rain-assessment
+npm i
 npm run backend
 ```
 
