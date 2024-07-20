@@ -16,6 +16,7 @@ export const Services: FC = () => {
     actionType,
     rowData,
     columns,
+    isPending,
     handleAction,
     handleSelectedService,
     handleNavigateback,
@@ -66,6 +67,7 @@ export const Services: FC = () => {
         <DataGrid
           rows={rowData}
           columns={columns}
+          loading={isPending}
           autoHeight
           checkboxSelection
           disableRowSelectionOnClick

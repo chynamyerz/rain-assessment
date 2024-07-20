@@ -13,6 +13,7 @@ export const RModal: FC<RModalProps> = ({
   open,
   children,
   title,
+  isBusy,
   primaryActionText,
   secondaryActionText,
   primaryAction,
@@ -26,9 +27,11 @@ export const RModal: FC<RModalProps> = ({
       {title && <DialogTitle>{title}</DialogTitle>}
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Button onClick={primaryAction}>{primaryActionText}</Button>
+        <Button onClick={primaryAction} disabled={isBusy}>
+          {primaryActionText}
+        </Button>
         {secondaryAction && (
-          <Button onClick={secondaryAction}>
+          <Button onClick={secondaryAction} disabled={isBusy} color="error">
             {secondaryActionText || "Cancel"}
           </Button>
         )}

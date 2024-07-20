@@ -65,7 +65,7 @@ export const Home: FC = () => {
             <Button
               variant="contained"
               disabled={isPending}
-              onClick={() => handleSubmit(email, password)}
+              onClick={handleSubmit}
             >
               {isPending ? "Loading..." : "Sign in"}
             </Button>
@@ -74,7 +74,7 @@ export const Home: FC = () => {
             <Button
               variant="contained"
               disabled={isPending}
-              onClick={() => handleSubmit(email, password)}
+              onClick={handleSubmit}
             >
               {isPending ? "Loading..." : "Sign up"}
             </Button>

@@ -1,21 +1,23 @@
 import { FC } from "react";
-import { TextField } from "@mui/material";
+import { Typography } from "@mui/material";
 
 import { RModal } from "@components/RModal/RModal";
 import { useDeleteService } from "./hooks/useDeleteService";
 
 export const DeleteService: FC = () => {
-  const { open, handleSubmit, handleCancel } = useDeleteService();
+  const { open, isPending, handleSubmit, handleCancel } = useDeleteService();
   return (
     <RModal
       open={open}
       title="Delete service"
       primaryAction={handleSubmit}
-      primaryActionText="Submit"
+      primaryActionText={isPending ? "Loading" : "Yes"}
       secondaryAction={handleCancel}
       secondaryActionText="Cancel"
     >
-      <TextField placeholder="Service name" />
+      <Typography variant="subtitle2">
+        Are you sure you want to delete this service?
+      </Typography>
     </RModal>
   );
 };

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { RootState } from "@store/index";
 import { Account } from "@store/types";
-import { queryFnWrapper } from "@utils/queryHelper";
+import { queryFnHelper } from "@utils/queryClientHelpers";
 
 export const useDashBoard = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -11,7 +11,7 @@ export const useDashBoard = () => {
   const { isPending, isError, data, error } = useQuery<{ account: Account }>({
     queryKey: ["Account"],
     queryFn: async () => {
-      return queryFnWrapper<{ account: Account }>("/account");
+      return queryFnHelper<{ account: Account }>("/account");
     },
   });
 

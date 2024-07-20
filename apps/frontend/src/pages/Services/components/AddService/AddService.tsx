@@ -1,22 +1,56 @@
 import { FC } from "react";
-import { TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 
 import { RModal } from "@components/RModal/RModal";
 import { useAddService } from "./hooks/useAddService";
+import "./styles.modules.css";
 
 export const AddService: FC = () => {
-  const { open, handleSubmit, handleCancel } = useAddService();
+  const {
+    open,
+    name,
+    status,
+    details,
+    isPending,
+    handleNameChange,
+    handleDetailsChange,
+    handleStatusChange,
+    handleSubmit,
+    handleCancel,
+  } = useAddService();
 
   return (
     <RModal
       open={open}
-      title="Add service"
+      title="Create service"
       primaryAction={handleSubmit}
-      primaryActionText="Submit"
+      primaryActionText={isPending ? "Loading..." : "Create"}
       secondaryAction={handleCancel}
       secondaryActionText="Cancel"
+      isBusy={isPending}
     >
-      <TextField placeholder="Service name" />
+      <Box className="create-service-container">
+        <TextField
+          label="Name"
+          variant="outlined"
+          onChange={handleNameChange}
+          value={name}
+        />
+
+        <TextField
+          label="Details"
+          variant="outlined"
+          onChange={handleDetailsChange}
+          value={details}
+        />
+
+        <TextField
+          label="Status"
+          variant="outlined"
+          onChange={handleStatusChange}
+          value={status}
+        />
+      </Box>
     </RModal>
   );
 };

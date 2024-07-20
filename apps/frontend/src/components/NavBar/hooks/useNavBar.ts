@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import { useScreenSize } from "@hooks/useScreenSize";
-import { User } from "@store/types";
+import { User } from "@store/user/types";
 import { NAVBAR_ITEMS } from "../constants";
 
 export const useNavBar = () => {
