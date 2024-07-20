@@ -4,12 +4,4 @@
   gap: 1rem;
   padding: 1rem;
   height: calc(100vh - 2rem);
-
-  .loading-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-  }
 }
