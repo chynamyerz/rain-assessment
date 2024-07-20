@@ -1,6 +1,6 @@
 export interface AccountProps {
-  name: string;
+  email: string;
   status: AccountStatus;
 }
 
-export type AccountStatus = 'active' | 'inactive';
+export type AccountStatus = "active" | "inactive";

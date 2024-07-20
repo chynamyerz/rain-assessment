@@ -1,20 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useDispatch } from "react-redux";
 
 import { User } from "@store/types";
+import { setUser } from "@store/user/userSlice";
+import { queryFnWrapper } from "@utils/queryHelper";
 
 export const useApp = () => {
-  const { isPending, isError, data, error } = useQuery<{ user: User }>({
+  const { isPending, isError, data, error, isSuccess } = useQuery<{
+    user: User;
+  }>({
     queryKey: ["User"],
     queryFn: async () => {
-      const token = localStorage.getItem("token");
-      const response = await axios(`${import.meta.env.VITE_API_URL}/auth`, {
-        headers: { Authorization: `Bearer ${token || ""}` },
-      });
-
-      return await response.data.data;
+      return queryFnWrapper<{ user: User }>("/auth");
     },
   });
+  const dispatch = useDispatch();
 
-  return { data, error, isError, isPending };
+  if (isSuccess) {
+    dispatch(setUser(data.user));
+  }
+
+  return { user: data?.user, error, isError, isPending };
 };
