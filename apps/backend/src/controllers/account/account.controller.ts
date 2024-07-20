@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-import { compare, hash } from "bcrypt";
+import { NextFunction, Response } from "express";
 import { UpdateAccountProps } from "./types";
 import { TypedRequest, TypedRequestBody } from "@utils/types";
 import asyncErrorHandler from "@utils/async-error-handler";

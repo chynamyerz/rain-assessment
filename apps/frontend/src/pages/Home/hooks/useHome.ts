@@ -1,20 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { AuthUser } from "@store/types";
-import queryClient from "queryClient";
+import { UserInput } from "../types";
 
 export const useHome = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isNewUser, setIsNewUser] = useState(false);
-  const client = useQueryClient(queryClient);
+  const client = useQueryClient();
   const navigate = useNavigate();
 
   const { isPending, isError, mutate } = useMutation({
-    mutationFn: (userInput: AuthUser) => {
+    mutationFn: (userInput: UserInput) => {
       const { isNew, ...requestBody } = userInput;
       if (isNew) {
         return axios.post(`${import.meta.env.VITE_API_URL}/users`, requestBody);
@@ -31,12 +30,6 @@ export const useHome = () => {
     },
   });
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/dash");
-    }
-  }, []);
-
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
@@ -49,13 +42,13 @@ export const useHome = () => {
     setIsNewUser(!isNewUser);
   };
 
-  const handleSubmit = (enteredEmail?: string, enteredPassword?: string) => {
-    if (!enteredEmail || !enteredPassword) {
+  const handleSubmit = () => {
+    if (!email || !password) {
       return;
     }
     mutate({
-      email: enteredEmail,
-      password: enteredPassword,
+      email,
+      password,
       isNew: isNewUser,
     });
   };

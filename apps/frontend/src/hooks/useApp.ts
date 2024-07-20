@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 
-import { User } from "@store/types";
 import { setUser } from "@store/user/userSlice";
-import { queryFnWrapper } from "@utils/queryHelper";
+import { queryFnHelper } from "@utils/queryClientHelpers";
+import { User } from "@store/user/types";
 
 export const useApp = () => {
   const { isPending, isError, data, error, isSuccess } = useQuery<{
@@ -11,7 +11,7 @@ export const useApp = () => {
   }>({
     queryKey: ["User"],
     queryFn: async () => {
-      return queryFnWrapper<{ user: User }>("/auth");
+      return queryFnHelper<{ user: User }>("/auth");
     },
   });
   const dispatch = useDispatch();

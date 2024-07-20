@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import { GridColDef } from "@mui/x-data-grid";
 
 import { useScreenSize } from "@hooks/useScreenSize";
 import {
@@ -11,14 +11,17 @@ import {
 import { RootState } from "@store/index";
 import { Service } from "@store/services/types";
 import { ActionType } from "@store/types";
+import { useQuery } from "@tanstack/react-query";
+import { queryFnHelper } from "@utils/queryClientHelpers";
 
 export const useServices = () => {
-  const { services, selectedService, actionType } = useSelector(
+  const { actionType, selectedService } = useSelector(
     (state: RootState) => state.services
   );
   const { isMediumAndAbove } = useScreenSize();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const columns: GridColDef<Service>[] = useMemo(() => {
     if (isMediumAndAbove) {
       return [
@@ -32,7 +35,24 @@ export const useServices = () => {
       { field: "status", flex: 1 },
     ] as GridColDef<Service>[];
   }, [isMediumAndAbove]);
-  const rowData: GridRowsProp<Service> = services;
+
+  /**
+   *
+   * Queries
+   *
+   */
+  const { isPending, data } = useQuery<{ services: Service[] }>({
+    queryKey: ["Services"],
+    queryFn: async () => {
+      return queryFnHelper<{ services: Service[] }>("/services");
+    },
+  });
+
+  /**
+   *
+   * Handlers
+   *
+   */
 
   const handleAction = (actionType: ActionType) => {
     dispatch(setActiontype(actionType));
@@ -48,9 +68,10 @@ export const useServices = () => {
 
   return {
     actionType,
-    rowData,
+    rowData: data?.services || [],
     columns,
     selectedService,
+    isPending,
     handleAction,
     handleSelectedService,
     handleNavigateback,

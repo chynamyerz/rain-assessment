@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import { LoadingSpinner } from "@components/LoadingSpinner/LoadingSpinner";
 import { Account } from "./components/Account/Account";
 import { AccountInfo } from "./components/AccountInfo/AccountInfo";
-import { useDashBoard } from "./components/hooks/useDashboard";
+import { useDashBoard } from "./hooks/useDashboard";
 import { AccountStatus } from "./components/Account/types";
 import "./styles.modules.css";
 
