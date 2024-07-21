@@ -1,7 +1,6 @@
 import { ActionType } from "@store/types";
 
 export interface PaymentsState {
-  payments: Payment[];
   actionType: ActionType;
 }
 

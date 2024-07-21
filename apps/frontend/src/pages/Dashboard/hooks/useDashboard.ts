@@ -8,12 +8,23 @@ import { queryFnHelper } from "@utils/queryClientHelpers";
 export const useDashBoard = () => {
   const { user } = useSelector((state: RootState) => state.user);
 
+  /**
+   *
+   * Queries
+   *
+   */
   const { isPending, isError, data, error } = useQuery<{ account: Account }>({
     queryKey: ["Account"],
     queryFn: async () => {
       return queryFnHelper<{ account: Account }>("/account");
     },
   });
+
+  /**
+   *
+   * Handlers
+   *
+   */
 
   const getBalance = (balance?: number) => {
     return `R${(balance || 0).toFixed(2)}`;

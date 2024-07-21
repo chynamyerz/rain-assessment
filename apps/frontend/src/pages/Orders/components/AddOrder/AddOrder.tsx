@@ -39,7 +39,6 @@ export const AddOrder: FC = () => {
     handleSubmit,
     handleCancel,
   } = useAddOrder();
-  let total = 0;
 
   return (
     <RModal
