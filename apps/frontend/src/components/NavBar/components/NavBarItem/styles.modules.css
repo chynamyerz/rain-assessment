@@ -34,5 +34,6 @@
 }
 
 .navbar-item-container.extracted {
+  justify-content: center;
   color: #0077c8;
 }

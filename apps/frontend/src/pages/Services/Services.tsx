@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add, DeleteForever, Edit } from "@mui/icons-material";
 
@@ -18,6 +18,7 @@ export const Services: FC = () => {
     columns,
     isPending,
     orderActionType,
+    gridApiRef,
     handleAction,
     handleSelectedService,
   } = useServices();
@@ -54,20 +55,29 @@ export const Services: FC = () => {
           </Button>
         )}
       </Box>
-      <Box>
-        <DataGrid
-          rows={rowData}
-          columns={columns}
-          loading={isPending}
-          autoHeight
-          checkboxSelection
-          disableRowSelectionOnClick
-          disableMultipleRowSelection
-          onRowSelectionModelChange={(row, details) => {
-            const rowData = details.api.getRow<Service>(row[0]);
-            handleSelectedService(rowData);
-          }}
-        />
+      <Box className="services-grid-container">
+        {rowData.length === 0 ? (
+          <Box className="empty-data">
+            <img src="/no-data.png" width={250} />
+            <Typography variant="body2">
+              You are not subcribed to any service.
+            </Typography>
+          </Box>
+        ) : (
+          <DataGrid
+            rows={rowData}
+            columns={columns}
+            loading={isPending}
+            checkboxSelection
+            disableRowSelectionOnClick
+            disableMultipleRowSelection
+            onRowSelectionModelChange={(row, details) => {
+              const rowData = details.api.getRow<Service>(row[0]);
+              handleSelectedService(rowData);
+            }}
+            apiRef={gridApiRef}
+          />
+        )}
       </Box>
 
       {orderActionType === "add" && <AddOrder />}

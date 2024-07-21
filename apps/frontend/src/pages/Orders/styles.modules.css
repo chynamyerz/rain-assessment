@@ -9,7 +9,15 @@
     gap: 0.5rem;
   }
 
-  .data-container {
-    height: fit-content;
+  .orders-grid-container {
+    height: calc(100vh - 150px);
+
+    .empty-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 80%;
+    }
   }
 }

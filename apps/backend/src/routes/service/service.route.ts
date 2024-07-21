@@ -1,5 +1,4 @@
 import {
-  createService,
   deleteService,
   getServices,
   updateService,
@@ -9,7 +8,6 @@ import { Router } from "express";
 const serviceRouter = Router();
 
 serviceRouter.get("/", getServices);
-serviceRouter.post("/", createService);
 serviceRouter.put("/:id", updateService);
 serviceRouter.delete("/:id", deleteService);
 

@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 
-import { setActiontype } from "@store/services/servicesSlice";
+import {
+  setActiontype,
+  setSelectedService,
+} from "@store/services/servicesSlice";
 import { mutationFnHelper } from "@utils/queryClientHelpers";
 import { RootState } from "@store/index";
 
@@ -26,6 +29,7 @@ export const useDeleteService = () => {
       await client.invalidateQueries({ queryKey: ["Services"] });
       setOpen(false);
       dispatch(setActiontype(undefined));
+      dispatch(setSelectedService(undefined));
     },
   });
 

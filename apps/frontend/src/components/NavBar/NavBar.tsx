@@ -43,7 +43,20 @@ export const NavBar: FC<NavBarProps> = ({ user }) => {
           )}
         </Box>
       ) : (
-        <NavBarDrawer />
+        <NavBarDrawer items={getNavbarItems(user)}>
+          {user && (
+            <Button
+              className="sign-out"
+              endIcon={<Logout />}
+              variant="contained"
+              size="small"
+              fullWidth
+              onClick={handleSignOut}
+            >
+              Logout
+            </Button>
+          )}
+        </NavBarDrawer>
       )}
     </Box>
   );

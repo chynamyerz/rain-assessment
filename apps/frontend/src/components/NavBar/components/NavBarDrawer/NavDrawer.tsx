@@ -1,13 +1,13 @@
-import { FC } from 'react';
-import { MenuOutlined, CloseOutlined } from '@mui/icons-material';
-import { Box, IconButton, Drawer, Divider } from '@mui/material';
+import { FC } from "react";
+import { MenuOutlined, CloseOutlined } from "@mui/icons-material";
+import { Box, IconButton, Drawer, Divider } from "@mui/material";
 
-import { NAVBAR_ITEMS } from '../../constants';
-import { NavBarItem } from '../NavBarItem/NavBarItem';
-import { useNavBarDrawer } from './hooks/useNavBarDrawer';
-import './styles.modules.css';
+import { NavBarItem } from "../NavBarItem/NavBarItem";
+import { useNavBarDrawer } from "./hooks/useNavBarDrawer";
+import { NavBarDrawerProps } from "./types";
+import "./styles.modules.css";
 
-export const NavBarDrawer: FC = () => {
+export const NavBarDrawer: FC<NavBarDrawerProps> = ({ items, children }) => {
   const { toggleDrawer, open } = useNavBarDrawer();
 
   return (
@@ -28,7 +28,7 @@ export const NavBarDrawer: FC = () => {
 
           <Divider />
 
-          {NAVBAR_ITEMS.map((navBarItem) => {
+          {items.map((navBarItem) => {
             return (
               <NavBarItem
                 key={navBarItem.title}
@@ -38,6 +38,8 @@ export const NavBarDrawer: FC = () => {
               />
             );
           })}
+
+          {children}
         </Box>
       </Drawer>
     </Box>

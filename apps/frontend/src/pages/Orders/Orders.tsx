@@ -1,12 +1,11 @@
 import { FC } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Add, DeleteForever, Edit } from "@mui/icons-material";
+import { Add, DeleteForever } from "@mui/icons-material";
 
 import { Order } from "@store/orders/types";
 import { useOrders } from "./hooks/useOders";
 import { AddOrder } from "./components/AddOrder/AddOrder";
-import { EditOrder } from "./components/EditOrder/EditOrder";
 import { DeleteOrder } from "./components/DeleteOrder/DeleteOrder";
 import "./styles.modules.css";
 
@@ -17,6 +16,7 @@ export const Orders: FC = () => {
     rowData,
     columns,
     isPending,
+    gridApiRef,
     handleAction,
     handleSelectedOrder,
   } = useOrders();
@@ -35,16 +35,6 @@ export const Orders: FC = () => {
         {selectedOrder && (
           <Button
             variant="outlined"
-            color="warning"
-            startIcon={<Edit />}
-            onClick={() => handleAction("edit")}
-          >
-            Edit
-          </Button>
-        )}
-        {selectedOrder && (
-          <Button
-            variant="outlined"
             color="error"
             startIcon={<DeleteForever />}
             onClick={() => handleAction("delete")}
@@ -53,24 +43,30 @@ export const Orders: FC = () => {
           </Button>
         )}
       </Box>
-      <Box>
-        <DataGrid
-          rows={rowData}
-          columns={columns}
-          loading={isPending}
-          autoHeight
-          checkboxSelection
-          disableRowSelectionOnClick
-          disableMultipleRowSelection
-          onRowSelectionModelChange={(row, details) => {
-            const rowData = details.api.getRow<Order>(row[0]);
-            handleSelectedOrder(rowData);
-          }}
-        />
+      <Box className="orders-grid-container">
+        {rowData.length === 0 ? (
+          <Box className="empty-data">
+            <img src="/no-data.png" width={250} />
+            <Typography variant="body2">You do not have any orders.</Typography>
+          </Box>
+        ) : (
+          <DataGrid
+            rows={rowData}
+            columns={columns}
+            loading={isPending}
+            checkboxSelection
+            disableRowSelectionOnClick
+            disableMultipleRowSelection
+            onRowSelectionModelChange={(row, details) => {
+              const rowData = details.api.getRow<Order>(row[0]);
+              handleSelectedOrder(rowData);
+            }}
+            apiRef={gridApiRef}
+          />
+        )}
       </Box>
 
       {actionType === "add" && <AddOrder />}
-      {actionType === "edit" && <EditOrder />}
       {actionType === "delete" && <DeleteOrder />}
     </Box>
   );
