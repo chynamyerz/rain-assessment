@@ -9,33 +9,10 @@ import { queryFnHelper } from "@utils/queryClientHelpers";
 
 export const usePayments = () => {
   const { isMediumAndAbove } = useScreenSize();
-  const columns: GridColDef<Payment>[] = useMemo(() => {
-    if (isMediumAndAbove) {
-      return [
-        {
-          field: "date",
-          headerName: "Date",
-          flex: 1,
-          valueFormatter: (value) => {
-            return dayjs(value).format("YYYY-MM-DD");
-          },
-        },
-        { field: "status", headerName: "Status", flex: 1 },
-        {
-          field: "amount",
-          headerName: "Amount",
-          flex: 1,
-          valueFormatter: (value: number) => {
-            return `R${value.toFixed(2)}`;
-          },
-        },
-      ] as GridColDef<Payment>[];
-    }
-    return [
-      { field: "name", flex: 1 },
-      { field: "status", flex: 1 },
-    ] as GridColDef<Payment>[];
-  }, [isMediumAndAbove]);
+  const columns: GridColDef<Payment>[] = useMemo(
+    () => getColumns(),
+    [isMediumAndAbove]
+  );
 
   /**
    *
@@ -48,6 +25,43 @@ export const usePayments = () => {
       return queryFnHelper<{ payments: Payment[] }>("/payments");
     },
   });
+
+  /**
+   *
+   * Handlers
+   *
+   */
+
+  function getColumns() {
+    const dateCol: GridColDef<Payment> = {
+      field: "date",
+      headerName: "Date",
+      flex: 1,
+      valueFormatter: (value) => {
+        return dayjs(value).format("YYYY-MM-DD");
+      },
+    };
+    const statusCol: GridColDef<Payment> = {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+    };
+    const columns: GridColDef<Payment>[] = [dateCol, statusCol];
+    if (isMediumAndAbove) {
+      return [
+        ...columns,
+        {
+          field: "amount",
+          headerName: "Amount",
+          flex: 1,
+          valueFormatter: (value: number) => {
+            return `R${value.toFixed(2)}`;
+          },
+        } as GridColDef<Payment>,
+      ];
+    }
+    return columns;
+  }
 
   return {
     rowData: data?.payments || [],

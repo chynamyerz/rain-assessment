@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GridColDef } from "@mui/x-data-grid";
+import { useQuery } from "@tanstack/react-query";
 
 import { useScreenSize } from "@hooks/useScreenSize";
 import {
@@ -12,7 +13,6 @@ import { setActiontype as setOrderActionType } from "@store/orders/ordersSlice";
 import { RootState } from "@store/index";
 import { Service } from "@store/services/types";
 import { ActionType } from "@store/types";
-import { useQuery } from "@tanstack/react-query";
 import { queryFnHelper } from "@utils/queryClientHelpers";
 
 export const useServices = () => {
@@ -25,19 +25,10 @@ export const useServices = () => {
   const { isMediumAndAbove } = useScreenSize();
   const dispatch = useDispatch();
 
-  const columns: GridColDef<Service>[] = useMemo(() => {
-    if (isMediumAndAbove) {
-      return [
-        { field: "name", headerName: "Name", flex: 1 },
-        { field: "status", headerName: "Status", flex: 1 },
-        { field: "details", headerName: "Details", flex: 1 },
-      ] as GridColDef<Service>[];
-    }
-    return [
-      { field: "name", flex: 1 },
-      { field: "status", flex: 1 },
-    ] as GridColDef<Service>[];
-  }, [isMediumAndAbove]);
+  const columns: GridColDef<Service>[] = useMemo(
+    () => getColumns(),
+    [isMediumAndAbove]
+  );
 
   /**
    *
@@ -56,6 +47,31 @@ export const useServices = () => {
    * Handlers
    *
    */
+
+  function getColumns() {
+    const nameCol: GridColDef<Service> = {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+    };
+    const statusCol: GridColDef<Service> = {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+    };
+    const columns: GridColDef<Service>[] = [nameCol, statusCol];
+    if (isMediumAndAbove) {
+      return [
+        ...columns,
+        {
+          field: "details",
+          headerName: "Details",
+          flex: 1,
+        } as GridColDef<Service>,
+      ];
+    }
+    return columns;
+  }
 
   const handleAction = (actionType: ActionType) => {
     if (actionType === "add") {
