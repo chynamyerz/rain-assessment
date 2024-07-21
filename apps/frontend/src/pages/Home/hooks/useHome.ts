@@ -12,6 +12,11 @@ export const useHome = () => {
   const client = useQueryClient();
   const navigate = useNavigate();
 
+  /**
+   *
+   * Mutations
+   *
+   */
   const { isPending, isError, mutate } = useMutation({
     mutationFn: (userInput: UserInput) => {
       const { isNew, ...requestBody } = userInput;
@@ -29,6 +34,12 @@ export const useHome = () => {
       navigate("/dashboard");
     },
   });
+
+  /**
+   *
+   * Handlers
+   *
+   */
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);

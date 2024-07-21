@@ -5,6 +5,7 @@ import accountRouter from "@routers/account/account.route";
 import authRouter from "@routers/auth/auth.route";
 import serviceRouter from "@routers/service/service.route";
 import orderRouter from "@routers/order/order.route";
+import paymentRouter from "./routes/payment/payment.route";
 import AppError from "@utils/app-error";
 import { HTTP_STATUS } from "@utils/http-status";
 import { errorHandler } from "@utils/error-handler";
@@ -19,6 +20,7 @@ app.use("/api/users", userRouter);
 app.use("/api/account", accountRouter);
 app.use("/api/services", serviceRouter);
 app.use("/api/orders", orderRouter);
+app.use("/api/payments", paymentRouter);
 
 app.all("*", (req, res, next) => {
   next(

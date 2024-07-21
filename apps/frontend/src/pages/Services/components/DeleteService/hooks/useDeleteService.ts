@@ -29,6 +29,12 @@ export const useDeleteService = () => {
     },
   });
 
+  /**
+   *
+   * Handlers
+   *
+   */
+
   const handleSubmit = () => {
     mutate();
   };
