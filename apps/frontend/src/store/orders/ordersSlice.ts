@@ -5,11 +5,6 @@ import { ActionType } from "@store/types";
 import { OrdersState, Order } from "./types";
 
 const initialState: OrdersState = {
-  orders: [
-    { id: 1, date: "2-24-06-12", items: ["4g"], status: "pending" },
-    { id: 2, date: "2-24-06-12", items: ["5g"], status: "shipped" },
-    { id: 3, date: "2-24-06-12", items: ["mobile"], status: "delivered" },
-  ],
   selectedOrder: undefined,
   actionType: undefined,
 };
@@ -18,23 +13,6 @@ export const ordersSlice = createSlice({
   name: "orders",
   initialState,
   reducers: {
-    addOrder: (state, action: PayloadAction<Order>) => {
-      state.orders.push(action.payload);
-    },
-    editOrder: (state, action: PayloadAction<Order>) => {
-      state.orders = state.orders.map((order) => {
-        if (order.id === action.payload.id) {
-          return action.payload;
-        }
-
-        return order;
-      });
-    },
-    deleteOrder: (state, action: PayloadAction<Order>) => {
-      state.orders = state.orders.filter(
-        (order) => order.id != action.payload.id
-      );
-    },
     setActiontype: (state, action: PayloadAction<ActionType>) => {
       switch (action.payload) {
         case "add":
@@ -60,12 +38,6 @@ export const ordersSlice = createSlice({
   },
 });
 
-export const {
-  addOrder,
-  editOrder,
-  deleteOrder,
-  setActiontype,
-  setSelectedOrder,
-} = ordersSlice.actions;
+export const { setActiontype, setSelectedOrder } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

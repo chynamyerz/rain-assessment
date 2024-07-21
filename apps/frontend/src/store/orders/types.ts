@@ -1,7 +1,6 @@
 import { ActionType } from "@store/types";
 
 export interface OrdersState {
-  orders: Order[];
   selectedOrder: Order | undefined | null;
   actionType: ActionType;
 }
@@ -9,8 +8,13 @@ export interface OrdersState {
 export interface Order {
   id: number;
   date: string;
-  items: OrderType[];
+  items: OrderItem[];
   status: OrderStatus;
+}
+
+export interface OrderItem {
+  id: number;
+  item: OrderType;
 }
 
 export type OrderType = "4g" | "5g" | "mobile";

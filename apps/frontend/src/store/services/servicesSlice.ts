@@ -5,11 +5,6 @@ import { ActionType } from "@store/types";
 import { ServicesState, Service } from "./types";
 
 const initialState: ServicesState = {
-  services: [
-    { id: 1, name: "Hello", status: "World", details: "Details" },
-    { id: 2, name: "Hello", status: "World", details: "Details" },
-    { id: 3, name: "Hello", status: "World", details: "Details" },
-  ],
   selectedService: undefined,
   actionType: undefined,
 };
@@ -18,23 +13,6 @@ export const servicesSlice = createSlice({
   name: "services",
   initialState,
   reducers: {
-    addService: (state, action: PayloadAction<Service>) => {
-      state.services.push(action.payload);
-    },
-    editService: (state, action: PayloadAction<Service>) => {
-      state.services = state.services.map((service) => {
-        if (service.id === action.payload.id) {
-          return action.payload;
-        }
-
-        return service;
-      });
-    },
-    deleteService: (state, action: PayloadAction<Service>) => {
-      state.services = state.services.filter(
-        (service) => service.id != action.payload.id
-      );
-    },
     setActiontype: (state, action: PayloadAction<ActionType>) => {
       switch (action.payload) {
         case "add":
@@ -60,12 +38,6 @@ export const servicesSlice = createSlice({
   },
 });
 
-export const {
-  addService,
-  editService,
-  deleteService,
-  setActiontype,
-  setSelectedService,
-} = servicesSlice.actions;
+export const { setActiontype, setSelectedService } = servicesSlice.actions;
 
 export default servicesSlice.reducer;
