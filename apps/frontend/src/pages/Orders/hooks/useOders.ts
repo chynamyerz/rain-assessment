@@ -1,27 +1,42 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import { GridColDef } from "@mui/x-data-grid";
+import dayjs from "dayjs";
 
 import { useScreenSize } from "@hooks/useScreenSize";
 import { setActiontype, setSelectedOrder } from "@store/orders/ordersSlice";
 import { RootState } from "@store/index";
-import { Order } from "@store/orders/types";
+import { Order, OrderItem } from "@store/orders/types";
 import { ActionType } from "@store/types";
+import { useQuery } from "@tanstack/react-query";
+import { queryFnHelper } from "@utils/queryClientHelpers";
 
 export const useOrders = () => {
-  const { orders, selectedOrder, actionType } = useSelector(
+  const { selectedOrder, actionType } = useSelector(
     (state: RootState) => state.orders
   );
   const { isMediumAndAbove } = useScreenSize();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const columns: GridColDef<Order>[] = useMemo(() => {
     if (isMediumAndAbove) {
       return [
-        { field: "date", headerName: "Date", flex: 1 },
+        {
+          field: "date",
+          headerName: "Date",
+          flex: 1,
+          valueFormatter: (value) => {
+            return dayjs(value).format("YYYY-MM-DD");
+          },
+        },
         { field: "status", headerName: "Status", flex: 1 },
-        { field: "item", headerName: "Items", flex: 1 },
+        {
+          field: "items",
+          headerName: "Items",
+          flex: 1,
+          valueFormatter: (value: OrderItem[]) => {
+            return value.map((item) => item.item).join(", ");
+          },
+        },
       ] as GridColDef<Order>[];
     }
     return [
@@ -29,7 +44,18 @@ export const useOrders = () => {
       { field: "status", flex: 1 },
     ] as GridColDef<Order>[];
   }, [isMediumAndAbove]);
-  const rowData: GridRowsProp<Order> = orders;
+
+  /**
+   *
+   * Queries
+   *
+   */
+  const { isPending, data } = useQuery<{ orders: Order[] }>({
+    queryKey: ["Orders"],
+    queryFn: async () => {
+      return queryFnHelper<{ orders: Order[] }>("/orders");
+    },
+  });
 
   const handleAction = (actionType: ActionType) => {
     dispatch(setActiontype(actionType));
@@ -39,17 +65,13 @@ export const useOrders = () => {
     dispatch(setSelectedOrder(order));
   };
 
-  const handleNavigateback = () => {
-    navigate(-1);
-  };
-
   return {
     actionType,
-    rowData,
+    rowData: data?.orders || [],
     columns,
     selectedOrder,
+    isPending,
     handleAction,
     handleSelectedOrder,
-    handleNavigateback,
   };
 };

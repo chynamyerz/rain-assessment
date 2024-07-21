@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { GridColDef } from "@mui/x-data-grid";
 
@@ -8,6 +7,8 @@ import {
   setActiontype,
   setSelectedService,
 } from "@store/services/servicesSlice";
+import { setActiontype as setOrderActionType } from "@store/orders/ordersSlice";
+
 import { RootState } from "@store/index";
 import { Service } from "@store/services/types";
 import { ActionType } from "@store/types";
@@ -18,8 +19,10 @@ export const useServices = () => {
   const { actionType, selectedService } = useSelector(
     (state: RootState) => state.services
   );
+  const { actionType: orderActionType } = useSelector(
+    (state: RootState) => state.orders
+  );
   const { isMediumAndAbove } = useScreenSize();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const columns: GridColDef<Service>[] = useMemo(() => {
@@ -55,6 +58,10 @@ export const useServices = () => {
    */
 
   const handleAction = (actionType: ActionType) => {
+    if (actionType === "add") {
+      dispatch(setOrderActionType(actionType));
+      return;
+    }
     dispatch(setActiontype(actionType));
   };
 
@@ -62,18 +69,14 @@ export const useServices = () => {
     dispatch(setSelectedService(service));
   };
 
-  const handleNavigateback = () => {
-    navigate(-1);
-  };
-
   return {
     actionType,
+    orderActionType,
     rowData: data?.services || [],
     columns,
     selectedService,
     isPending,
     handleAction,
     handleSelectedService,
-    handleNavigateback,
   };
 };

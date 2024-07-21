@@ -1,14 +1,14 @@
 import { FC } from "react";
 import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Add, ChevronLeft, DeleteForever, Edit } from "@mui/icons-material";
+import { Add, DeleteForever, Edit } from "@mui/icons-material";
 
 import { Service } from "@store/services/types";
 import { useServices } from "./hooks/useServices";
-import { AddService } from "./components/AddService/AddService";
 import { DeleteService } from "./components/DeleteService/DeleteService";
 import { EditService } from "./components/EditService/EditService";
 import "./styles.modules.css";
+import { AddOrder } from "@pages/Orders/components/AddOrder/AddOrder";
 
 export const Services: FC = () => {
   const {
@@ -17,22 +17,13 @@ export const Services: FC = () => {
     rowData,
     columns,
     isPending,
+    orderActionType,
     handleAction,
     handleSelectedService,
-    handleNavigateback,
   } = useServices();
 
   return (
     <Box className="services">
-      <Box>
-        <Button
-          variant="outlined"
-          startIcon={<ChevronLeft />}
-          onClick={handleNavigateback}
-        >
-          Back
-        </Button>
-      </Box>
       <Box className="action-buttons">
         <Button
           variant="outlined"
@@ -40,7 +31,7 @@ export const Services: FC = () => {
           startIcon={<Add />}
           onClick={() => handleAction("add")}
         >
-          Add
+          Order new service
         </Button>
         {selectedService && (
           <Button
@@ -79,7 +70,7 @@ export const Services: FC = () => {
         />
       </Box>
 
-      {actionType === "add" && <AddService />}
+      {orderActionType === "add" && <AddOrder />}
       {actionType === "edit" && <EditService />}
       {actionType === "delete" && <DeleteService />}
     </Box>

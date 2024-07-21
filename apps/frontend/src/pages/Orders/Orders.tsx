@@ -1,14 +1,14 @@
 import { FC } from "react";
 import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Add, ChevronLeft, DeleteForever, Edit } from "@mui/icons-material";
+import { Add, DeleteForever, Edit } from "@mui/icons-material";
 
 import { Order } from "@store/orders/types";
 import { useOrders } from "./hooks/useOders";
-import "./styles.modules.css";
 import { AddOrder } from "./components/AddOrder/AddOrder";
 import { EditOrder } from "./components/EditOrder/EditOrder";
 import { DeleteOrder } from "./components/DeleteOrder/DeleteOrder";
+import "./styles.modules.css";
 
 export const Orders: FC = () => {
   const {
@@ -16,22 +16,13 @@ export const Orders: FC = () => {
     actionType,
     rowData,
     columns,
+    isPending,
     handleAction,
     handleSelectedOrder,
-    handleNavigateback,
   } = useOrders();
 
   return (
     <Box className="oders">
-      <Box>
-        <Button
-          variant="outlined"
-          startIcon={<ChevronLeft />}
-          onClick={handleNavigateback}
-        >
-          Back
-        </Button>
-      </Box>
       <Box className="action-buttons">
         <Button
           variant="outlined"
@@ -66,6 +57,7 @@ export const Orders: FC = () => {
         <DataGrid
           rows={rowData}
           columns={columns}
+          loading={isPending}
           autoHeight
           checkboxSelection
           disableRowSelectionOnClick
