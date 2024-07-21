@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, useGridApiRef } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 
 import { useScreenSize } from "@hooks/useScreenSize";
@@ -22,6 +22,7 @@ export const useServices = () => {
   const { actionType: orderActionType } = useSelector(
     (state: RootState) => state.orders
   );
+  const gridApiRef = useGridApiRef();
   const { isMediumAndAbove } = useScreenSize();
   const dispatch = useDispatch();
 
@@ -29,6 +30,19 @@ export const useServices = () => {
     () => getColumns(),
     [isMediumAndAbove]
   );
+
+  /**
+   *
+   * Effects
+   *
+   */
+  useEffect(() => {
+    if (gridApiRef.current?.getSelectedRows?.().size > 0 && !selectedService) {
+      gridApiRef.current.getSelectedRows().forEach((row) => {
+        gridApiRef.current.selectRow(row.id, false);
+      });
+    }
+  }, [selectedService, gridApiRef]);
 
   /**
    *
@@ -92,6 +106,7 @@ export const useServices = () => {
     columns,
     selectedService,
     isPending,
+    gridApiRef,
     handleAction,
     handleSelectedService,
   };

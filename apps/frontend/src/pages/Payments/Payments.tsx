@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 import { usePayments } from "./hooks/usePayments";
@@ -10,14 +10,24 @@ export const Payments: FC = () => {
 
   return (
     <Box className="payments">
-      <DataGrid
-        rows={rowData}
-        columns={columns}
-        loading={isPending}
-        autoHeight
-        disableRowSelectionOnClick
-        disableMultipleRowSelection
-      />
+      <Box className="payments-grid-container">
+        {rowData.length === 0 ? (
+          <Box className="empty-data">
+            <img src="/no-data.png" width={250} />
+            <Typography variant="body2">
+              You do not have any payments.
+            </Typography>
+          </Box>
+        ) : (
+          <DataGrid
+            rows={rowData}
+            columns={columns}
+            loading={isPending}
+            disableRowSelectionOnClick
+            disableMultipleRowSelection
+          />
+        )}
+      </Box>
     </Box>
   );
 };

@@ -2,16 +2,19 @@ import { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { setActiontype } from "@store/services/servicesSlice";
+import {
+  setActiontype,
+  setSelectedService,
+} from "@store/services/servicesSlice";
 import { ServiceUpdateInput } from "../types";
 import { mutationFnHelper } from "@utils/queryClientHelpers";
 import { RootState } from "@store/index";
+import { SelectChangeEvent } from "@mui/material";
 
 export const useEditService = () => {
   const [open, setOpen] = useState(true);
   const [name, setName] = useState("");
-  const [status, setStatus] = useState("");
-  const [details, setDetails] = useState("");
+  const [paymentDetails, setPaymentDetails] = useState("");
   const { selectedService } = useSelector((state: RootState) => state.services);
 
   const dispatch = useDispatch();
@@ -32,11 +35,11 @@ export const useEditService = () => {
     },
     onSuccess: async () => {
       await client.invalidateQueries({ queryKey: ["Services"] });
+      await client.invalidateQueries({ queryKey: ["Payments"] });
       setOpen(false);
       dispatch(setActiontype(undefined));
+      dispatch(setSelectedService(undefined));
       setName("");
-      setDetails("");
-      setStatus("");
     },
   });
 
@@ -46,23 +49,21 @@ export const useEditService = () => {
    *
    */
 
-  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (event: SelectChangeEvent<string>) => {
     setName(event.target.value);
   };
 
-  const handleDetailsChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setDetails(event.target.value);
-  };
-
-  const handleStatusChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setStatus(event.target.value);
+  const handlePaymentDetailsChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPaymentDetails(event.target.value);
   };
 
   const handleSubmit = () => {
+    if (!name || !paymentDetails) {
+      return;
+    }
+
     mutate({
       name,
-      details,
-      status,
     });
   };
 
@@ -74,13 +75,11 @@ export const useEditService = () => {
   return {
     open,
     name,
-    status,
-    details,
     isPending,
-    selectedService,
+    selectedService: selectedService!,
+    paymentDetails,
+    handlePaymentDetailsChange,
     handleNameChange,
-    handleDetailsChange,
-    handleStatusChange,
     handleSubmit,
     handleCancel,
   };

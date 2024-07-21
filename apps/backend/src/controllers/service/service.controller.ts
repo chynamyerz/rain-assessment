@@ -4,15 +4,12 @@ import { customError } from "@utils/app-error";
 import { HTTP_STATUS } from "@utils/http-status";
 import prismaClient from "@/prisma-client";
 import { userAuthToken } from "@/utils/userAuthToken";
-import {
-  TypedRequest,
-  TypedRequestBody,
-  TypedRequestQuery,
-} from "@/utils/types";
-import { CreateServiceProps, UpdateServiceProps } from "./types";
+import { TypedRequest, TypedRequestQuery } from "@/utils/types";
+import { UpdateServiceProps } from "./types";
 
 const serviceClient = prismaClient.service;
 const accountClient = prismaClient.account;
+const paymentClient = prismaClient.payment;
 
 export const getServices = asyncErrorHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -52,9 +49,9 @@ export const getServices = asyncErrorHandler(
   }
 );
 
-export const createService = asyncErrorHandler(
+export const updateService = asyncErrorHandler(
   async (
-    req: TypedRequestBody<CreateServiceProps>,
+    req: TypedRequest<{ id: string }, UpdateServiceProps>,
     res: Response,
     next: NextFunction
   ) => {
@@ -90,72 +87,34 @@ export const createService = asyncErrorHandler(
       );
     }
 
-    if (!req.body.details) {
-      return customError(
-        `Details required, but it is not provided!`,
-        HTTP_STATUS.BAD_REQUEST,
-        next
-      );
+    let amount = 0;
+    let details = "";
+
+    if (req.body.name === "5G") {
+      details = "100+ Mbps Unlimited";
+      amount = 100;
+    } else if (req.body.name === "4G Mobile") {
+      details = "2GB";
+      amount = 50;
+    } else {
+      details = "10 Mbps limited";
+      amount = 75;
     }
 
-    if (!req.body.status) {
-      return customError(
-        `Status required, but it is not provided!`,
-        HTTP_STATUS.BAD_REQUEST,
-        next
-      );
-    }
-
-    const service = await serviceClient.create({
-      data: { ...req.body, accountId: account.id },
-    });
-
-    res.status(HTTP_STATUS.OK).json({ data: { service }, success: true });
-  }
-);
-
-export const updateService = asyncErrorHandler(
-  async (
-    req: TypedRequest<{ id: string }, UpdateServiceProps>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    let tokenDetails: { id: number } | void;
-
-    try {
-      tokenDetails = userAuthToken(req, next);
-    } catch (error) {
-      return customError(
-        `You are not signed in!`,
-        HTTP_STATUS.BAD_REQUEST,
-        next
-      );
-    }
-
-    const { id } = tokenDetails!;
-
-    const account = await accountClient.findUnique({ where: { userId: id } });
-
-    if (!account) {
-      return customError(
-        `Account for user with id: ${id}, does not exist!`,
-        HTTP_STATUS.NOT_FOUND,
-        next
-      );
-    }
-
-    const updateData: UpdateServiceProps = {};
-
-    for (const key of Object.keys(req.body)) {
-      type keyType = "name" | "details" | "status";
-      if (req.body[key as keyType]) {
-        updateData[key as keyType] = req.body[key as keyType];
-      }
-    }
+    const updateData: UpdateServiceProps = { details, name: req.body.name };
 
     const service = await serviceClient.update({
       where: { id: Number(req.params.id) },
       data: updateData,
+    });
+
+    await paymentClient.create({
+      data: {
+        date: new Date().toISOString(),
+        amount,
+        status: "completed",
+        accountId: account.id,
+      },
     });
 
     res.status(HTTP_STATUS.OK).json({ data: { service }, success: true });
@@ -190,15 +149,6 @@ export const deleteService = asyncErrorHandler(
         HTTP_STATUS.NOT_FOUND,
         next
       );
-    }
-
-    const updateData: UpdateServiceProps = {};
-
-    for (const key of Object.keys(req.body)) {
-      type keyType = "name" | "details" | "status";
-      if (req.body[key as keyType]) {
-        updateData[key as keyType] = req.body[key as keyType];
-      }
     }
 
     const service = await serviceClient.delete({

@@ -4,10 +4,11 @@ import { customError } from "@utils/app-error";
 import { HTTP_STATUS } from "@utils/http-status";
 import prismaClient from "@/prisma-client";
 import { userAuthToken } from "@/utils/userAuthToken";
-import { TypedRequestBody } from "@/utils/types";
+import { TypedRequestBody, TypedRequestQuery } from "@/utils/types";
 import { CreateOrderProps } from "./types";
 
 const orderClient = prismaClient.order;
+const orderItemClient = prismaClient.orderItem;
 const paymentClient = prismaClient.payment;
 const serviceClient = prismaClient.service;
 const accountClient = prismaClient.account;
@@ -113,10 +114,10 @@ export const createOrder = asyncErrorHandler(
         amount += 100;
       } else if (item === "4G Mobile") {
         details = "2GB";
-        amount += 75;
+        amount += 50;
       } else {
         details = "10 Mbps limited";
-        amount += 50;
+        amount += 75;
       }
 
       await serviceClient.create({
@@ -142,97 +143,46 @@ export const createOrder = asyncErrorHandler(
   }
 );
 
-// export const updateService = asyncErrorHandler(
-//   async (
-//     req: TypedRequest<{ id: string }, UpdateServiceProps>,
-//     res: Response,
-//     next: NextFunction
-//   ) => {
-//     let tokenDetails: { id: number } | void;
+export const deleteOrder = asyncErrorHandler(
+  async (
+    req: TypedRequestQuery<{ id: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    let tokenDetails: { id: number } | void;
 
-//     try {
-//       tokenDetails = userAuthToken(req, next);
-//     } catch (error) {
-//       return customError(
-//         `You are not signed in!`,
-//         HTTP_STATUS.BAD_REQUEST,
-//         next
-//       );
-//     }
+    try {
+      tokenDetails = userAuthToken(req, next);
+    } catch (error) {
+      return customError(
+        `You are not signed in!`,
+        HTTP_STATUS.BAD_REQUEST,
+        next
+      );
+    }
 
-//     const { id } = tokenDetails!;
+    const { id } = tokenDetails!;
 
-//     const account = await accountClient.findUnique({ where: { userId: id } });
+    const account = await accountClient.findUnique({ where: { userId: id } });
 
-//     if (!account) {
-//       return customError(
-//         `Account for user with id: ${id}, does not exist!`,
-//         HTTP_STATUS.NOT_FOUND,
-//         next
-//       );
-//     }
+    if (!account) {
+      return customError(
+        `Account for user with id: ${id}, does not exist!`,
+        HTTP_STATUS.NOT_FOUND,
+        next
+      );
+    }
 
-//     const updateData: UpdateServiceProps = {};
+    await orderItemClient.deleteMany({
+      where: { orderId: Number(req.params.id) },
+    });
 
-//     for (const key of Object.keys(req.body)) {
-//       type keyType = "name" | "details" | "status";
-//       if (req.body[key as keyType]) {
-//         updateData[key as keyType] = req.body[key as keyType];
-//       }
-//     }
+    const order = await orderClient.delete({
+      where: {
+        id: Number(req.params.id),
+      },
+    });
 
-//     const service = await serviceClient.update({
-//       where: { id: Number(req.params.id) },
-//       data: updateData,
-//     });
-
-//     res.status(HTTP_STATUS.OK).json({ data: { service }, success: true });
-//   }
-// );
-
-// export const deleteService = asyncErrorHandler(
-//   async (
-//     req: TypedRequestQuery<{ id: string }>,
-//     res: Response,
-//     next: NextFunction
-//   ) => {
-//     let tokenDetails: { id: number } | void;
-
-//     try {
-//       tokenDetails = userAuthToken(req, next);
-//     } catch (error) {
-//       return customError(
-//         `You are not signed in!`,
-//         HTTP_STATUS.BAD_REQUEST,
-//         next
-//       );
-//     }
-
-//     const { id } = tokenDetails!;
-
-//     const account = await accountClient.findUnique({ where: { userId: id } });
-
-//     if (!account) {
-//       return customError(
-//         `Account for user with id: ${id}, does not exist!`,
-//         HTTP_STATUS.NOT_FOUND,
-//         next
-//       );
-//     }
-
-//     const updateData: UpdateServiceProps = {};
-
-//     for (const key of Object.keys(req.body)) {
-//       type keyType = "name" | "details" | "status";
-//       if (req.body[key as keyType]) {
-//         updateData[key as keyType] = req.body[key as keyType];
-//       }
-//     }
-
-//     const service = await serviceClient.delete({
-//       where: { id: Number(req.params.id) },
-//     });
-
-//     res.status(HTTP_STATUS.OK).json({ data: { service }, success: true });
-//   }
-// );
+    res.status(HTTP_STATUS.OK).json({ data: { order }, success: true });
+  }
+);

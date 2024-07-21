@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, useGridApiRef } from "@mui/x-data-grid";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 
@@ -16,11 +16,25 @@ export const useOrders = () => {
     (state: RootState) => state.orders
   );
   const { isMediumAndAbove } = useScreenSize();
+  const gridApiRef = useGridApiRef();
   const dispatch = useDispatch();
   const columns: GridColDef<Order>[] = useMemo(
     () => getColumns(),
     [isMediumAndAbove]
   );
+
+  /**
+   *
+   * Effects
+   *
+   */
+  useEffect(() => {
+    if (gridApiRef.current?.getSelectedRows?.().size > 0 && !selectedOrder) {
+      gridApiRef.current.getSelectedRows().forEach((row) => {
+        gridApiRef.current.selectRow(row.id, false);
+      });
+    }
+  }, [selectedOrder, gridApiRef]);
 
   /**
    *
@@ -85,6 +99,7 @@ export const useOrders = () => {
     columns,
     selectedOrder,
     isPending,
+    gridApiRef,
     handleAction,
     handleSelectedOrder,
   };
