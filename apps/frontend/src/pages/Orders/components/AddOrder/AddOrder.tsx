@@ -33,6 +33,7 @@ export const AddOrder: FC = () => {
     paymentDetails,
     items,
     isPending,
+    errors,
     getTotal,
     handleItemsChange,
     handlePaymentDetailsChange,
@@ -61,6 +62,7 @@ export const AddOrder: FC = () => {
             onChange={handleItemsChange}
             renderValue={(selected) => selected.join(", ")}
             MenuProps={MenuProps}
+            error={!!errors?.items}
           >
             {ITEMS.map(({ name }) => (
               <MenuItem key={name} value={name}>
@@ -69,6 +71,11 @@ export const AddOrder: FC = () => {
               </MenuItem>
             ))}
           </Select>
+          {errors?.items && (
+            <Typography variant="body2" color="error" p={1}>
+              {errors?.items}
+            </Typography>
+          )}
         </FormControl>
 
         {items.length > 0 ? (
@@ -84,6 +91,8 @@ export const AddOrder: FC = () => {
               placeholder="Enter card details"
               value={paymentDetails}
               onChange={handlePaymentDetailsChange}
+              error={!!errors?.paymentDetails}
+              helperText={errors?.paymentDetails}
             />
           </Box>
         ) : (
