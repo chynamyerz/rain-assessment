@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { UserInput } from "../types";
 
@@ -9,6 +9,7 @@ export const useHome = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isNewUser, setIsNewUser] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>();
   const client = useQueryClient();
   const navigate = useNavigate();
 
@@ -17,7 +18,7 @@ export const useHome = () => {
    * Mutations
    *
    */
-  const { isPending, isError, mutate } = useMutation({
+  const { isPending, isError, error, mutate } = useMutation({
     mutationFn: (userInput: UserInput) => {
       const { isNew, ...requestBody } = userInput;
       if (isNew) {
@@ -54,9 +55,39 @@ export const useHome = () => {
   };
 
   const handleSubmit = () => {
-    if (!email || !password) {
+    let abortSubmit = false;
+    if (!email) {
+      abortSubmit = true;
+      setErrors((prevState) => ({
+        ...prevState,
+        email: "Email address is required!",
+      }));
+    } else {
+      setErrors((prevState) => ({
+        ...prevState,
+        email: undefined,
+      }));
+    }
+
+    if (!password) {
+      abortSubmit = true;
+      setErrors((prevState) => ({
+        ...prevState,
+        password: "Password is required!",
+      }));
+    } else {
+      setErrors((prevState) => ({
+        ...prevState,
+        password: undefined,
+      }));
+    }
+
+    if (abortSubmit) {
       return;
     }
+
+    setErrors(undefined);
+
     mutate({
       email,
       password,
@@ -70,6 +101,8 @@ export const useHome = () => {
     isNewUser,
     isPending,
     isError,
+    errors,
+    error: (error as AxiosError<{ message: string }>) || undefined || null,
     handleEmailChange,
     handlePasswordChange,
     handleNewUser,

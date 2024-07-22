@@ -20,6 +20,8 @@ export const Home: FC = () => {
     isPending,
     isError,
     isNewUser,
+    errors,
+    error,
     handleSubmit,
     handleNewUser,
     handleEmailChange,
@@ -40,9 +42,10 @@ export const Home: FC = () => {
         <CardContent className="auth-content">
           {isError && (
             <Chip
-              label="Something went wrong, please try again"
+              label={error?.response?.data.message}
               color="error"
-              variant="outlined"
+              variant="filled"
+              size="small"
             />
           )}
           <TextField
@@ -50,6 +53,8 @@ export const Home: FC = () => {
             variant="outlined"
             onChange={handleEmailChange}
             value={email}
+            error={!!errors?.email}
+            helperText={errors?.email}
           />
           <TextField
             label="Password"
@@ -57,6 +62,8 @@ export const Home: FC = () => {
             onChange={handlePasswordChange}
             value={password}
             type="password"
+            error={!!errors?.password}
+            helperText={errors?.password}
           />
           <FormControlLabel
             control={<Checkbox checked={isNewUser} onChange={handleNewUser} />}
