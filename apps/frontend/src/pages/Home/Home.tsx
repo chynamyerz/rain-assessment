@@ -56,6 +56,7 @@ export const Home: FC = () => {
             variant="outlined"
             onChange={handlePasswordChange}
             value={password}
+            type="password"
           />
           <FormControlLabel
             control={<Checkbox checked={isNewUser} onChange={handleNewUser} />}
