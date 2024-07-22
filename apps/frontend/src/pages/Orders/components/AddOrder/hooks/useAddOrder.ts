@@ -12,6 +12,10 @@ export const useAddOrder = () => {
   const [open, setOpen] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState("");
   const [items, setItems] = useState<string[]>([]);
+  const [errors, setErrors] = useState<{
+    items?: string;
+    paymentDetails?: string;
+  }>();
   const dispatch = useDispatch();
   const client = useQueryClient();
 
@@ -54,9 +58,32 @@ export const useAddOrder = () => {
   };
 
   const handleSubmit = () => {
-    if (!paymentDetails || !items || items.length < 1) {
+    let abortSubmit = false;
+    if (!paymentDetails) {
+      abortSubmit = true;
+      setErrors((prevState) => ({
+        ...prevState,
+        paymentDetails: "Payment details required!",
+      }));
+    } else {
+      setErrors((prevState) => ({ ...prevState, paymentDetails: undefined }));
+    }
+
+    if (!items || items.length < 1) {
+      abortSubmit = true;
+      setErrors((prevState) => ({
+        ...prevState,
+        items: "At least 1 item required!",
+      }));
+    } else {
+      setErrors((prevState) => ({ ...prevState, items: undefined }));
+    }
+
+    if (abortSubmit) {
       return;
     }
+
+    setErrors(undefined);
 
     mutate({
       items,
@@ -84,6 +111,7 @@ export const useAddOrder = () => {
     items,
     paymentDetails,
     isPending,
+    errors,
     getTotal,
     handlePaymentDetailsChange,
     handleItemsChange,
